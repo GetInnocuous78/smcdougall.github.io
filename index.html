@@ -1,0 +1,62 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>New Map</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.29/"></script>
+
+<script>
+  require(["esri/config", "esri/Map", "esri/views/MapView", "esri/widgets/Sketch", "esri/widgets/Home", "esri/layers/GraphicsLayer"], 
+  function(esriConfig, Map, MapView, Sketch, Home, GraphicsLayer) {
+    
+    esriConfig.apiKey = "AAPKf72fa1bd429e4b0db9cd146917a19262Iss3iJYwHXyAmMKlHuNIntopEVc5pOkkPVW0uiBEohldytz9fvhxCO3Q1UQ64PFT";
+
+    const map = new Map({
+      basemap: "arcgis/topographic" // basemap styles service
+    });
+
+    const view = new MapView({
+      map: map,
+      center: [-118.805, 34.027], // Longitude, latitude
+      zoom: 13, // Zoom level
+      container: "viewDiv" // Div element
+    });
+    
+    // Create Home widget
+    let homeWidget = new Home({
+      view: view
+    });
+
+    // Add the home widget to the top-left corner of the MapView
+    view.ui.add(homeWidget, "top-left");
+
+    view.when(() => {
+      const graphicsLayer = new GraphicsLayer();
+      const sketch = new Sketch({
+        layer: graphicsLayer,
+        view: view,
+        creationMode: "update"
+      });
+
+      view.ui.add(sketch, "top-right");
+    });
+  });
+</script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
